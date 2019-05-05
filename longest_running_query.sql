@@ -1,4 +1,4 @@
-SELECT OBJECT_NAME(objectid)
+SELECT OBJECT_NAME(objectid) AS obj_name
 	, creation_time 
     ,last_execution_time
     ,total_physical_reads
