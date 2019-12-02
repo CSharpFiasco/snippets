@@ -318,3 +318,71 @@ var validateMinLength = function(el, minLength){
 		}
 	}
 };
+
+var ajax = function(opts){
+	var xhr = new XMLHttpRequest();
+	var config = {
+		type: opts.type == undefined ? "GET" : opts.type,
+		url: opts.url == undefined ? "" : opts.url,
+		dataType: opts.dataType == undefined ? "" : opts.dataType,
+		async: opts.async === false ? false : true,
+		data: !opts.data ? {} : opts.data,
+		success: opts.success,
+		error: opts.error
+	};
+	var isFunction = function (functionToCheck) {
+		return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+	};
+
+	var isObject = function(obj)
+	{
+		return obj !== undefined && obj !== null && obj.constructor == Object;
+	};
+	
+	var jsonToQueryString = function(params){
+		return Object.keys(params).map(function(key) {
+			return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
+		}).join('&');
+	};
+	
+	
+	if(isObject(config.data) && config.type.toLowerCase() !== 'get' && !(config.data instanceof FormData)){
+		config.data = jsonToQueryString(config.data);
+	}else if(isObject(config.data) && config.type.toLowerCase() === 'get' && !(config.data instanceof FormData)){
+		config.url = config.url + (config.url.indexOf('?') !== -1 ? '&' : '?') + jsonToQueryString(config.data);
+		config.data = "";
+	}else if((config.data instanceof FormData)){
+		
+	}else{
+		config.data = "";
+	}
+  
+	if(isFunction(config.success)){
+		xhr.onload = function(data){
+			var responseData = data.target.responseText;
+			if(typeof(responseData) == "string" || config.dataType.toLowerCase() == "json"){
+				try{
+					responseData = JSON.parse(responseData);
+				}catch(e){
+					if(config.dataType.toLowerCase() == "json" && isFunction(config.error)){
+						config.error.bind(this)();
+						return false;
+					}
+				}
+			}
+			config.success.bind(this)(responseData)
+		};
+	}
+  
+	if(isFunction(config.error)){
+		xhr.onerror = config.error;
+	}
+	
+	xhr.open(config.type, config.url, config.async);
+	
+	if(config.type.toLowerCase() !== 'get' && !(config.data instanceof FormData)){
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	}
+	
+	xhr.send(config.data);
+};
