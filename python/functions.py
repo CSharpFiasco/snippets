@@ -27,12 +27,14 @@ def set_data(conn, query):
     cursor.execute(query)
     conn.commit()
 
+#sanitizing sql string
 def toSQL(string):
 	# print(string)
 	string = str(string)
 	string.replace('\'', '\'\'')
-	return string
+	return str
 
+#returns positive integer
 def days_between(d1, d2):
     d1 = datetime.strptime(d1, "%Y-%m-%d")
     d2 = datetime.strptime(d2, "%Y-%m-%d")
