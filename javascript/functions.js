@@ -271,7 +271,7 @@ var elementToObject = function(el){
 };
 
 var isFunction = function (functionToCheck) {
-	return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+	return !!functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 };
 
 var jsonToQueryString = function(params){
