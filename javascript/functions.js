@@ -86,19 +86,22 @@ var getWidth = function(el,withBorders) {
 };
 
 var isNumber = function(x) {
-	return !isNaN(x) && x !== "";
+	return !isNaN(x) && x !== null && x !== "";
 };
 
+//depends in isNumber function
 var isInteger = function(x) {
 	console.log(x)
 	return isNumber(x) && (x % 1 === 0) && (x.toString().indexOf(".")===-1);
 };
 
+//depends in isNumber function
 var isMoney = function(x) {
 	var regex = RegExp(/^\d*(\.\d{1,2})?$/);
-	return regex.test(x)
+	return isNumber(x) && regex.test(x)
 };
 
+//returns array
 var getParameterArray = function() {
 	var url = window.location.href;
 	var regex = new RegExp('[?]([^?]*)$'), results = regex.exec(url);
@@ -110,6 +113,8 @@ var getParameterArray = function() {
 	return results[1].split('&');
 };
 
+//depends on getParameterArray
+//returns full querystring
 var getQuerystring = function(str){
 	var querystring =  getParameterArray().filter(function(val){
 		return (val.split('=')[0].toLowerCase() === str.toLowerCase());
@@ -120,6 +125,7 @@ var getQuerystring = function(str){
 	return querystring;
 };
 
+//searches querystring for a key and returns the value. 
 var getQuerystringValue = function(str){
 	var querystring =  getParameterArray().filter(function(val){
 		return (val.split('=')[0].toLowerCase() === str.toLowerCase());
@@ -165,7 +171,7 @@ String.prototype.toElement = function(){
     return temp.firstChild;
 }
 	
-var makeHtml = function (string) {
+var toHtml = function (string) {
 	var temp = document.createElement('div');
 	temp.innerHTML = string;
 	return temp.firstChild;
