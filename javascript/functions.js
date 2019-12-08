@@ -299,7 +299,36 @@ var getOffset = function(el) {
         top: box.top + window.pageYOffset - document.documentElement.clientTop,
         left: box.left + window.pageXOffset - document.documentElement.clientLeft
     };
+};
+
+var redirect = function(url){
+	window.location.href = url;
+};
+
+//polyfill https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
+if (!String.prototype.includes) {
+	String.prototype.includes = function(search, start) {
+	  'use strict';
+  
+	  if (search instanceof RegExp) {
+		throw TypeError('first argument must not be a RegExp');
+	  } 
+	  if (start === undefined) { start = 0; }
+	  return this.indexOf(search, start) !== -1;
+	};
 }
+
+var redirect = function(url){
+	url = url.includes('/') ? url.split('/').slice(0).join('/') : '/' + url;
+	window.location.replace(window.location.origin + url);
+};
+
+//pushURL('/hello/world')
+//to do rename to better name
+var pushURL = function(url){
+	url = url.includes('/') ? url.split('/').slice(0).join('/') : '/' + url;
+	window.history.pushState('', '', window.location.origin + url);
+};
 
 var initMinLengthValidation = function(){
 	var minLengthEls = document.querySelectorAll('[minlength]');
