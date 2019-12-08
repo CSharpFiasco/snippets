@@ -169,7 +169,13 @@ String.prototype.toElement = function(){
 	
     temp.innerHTML = str;
     return temp.firstChild;
-}
+};
+
+//document.querySelectorAll('selector').toArray()
+//allows us to use map,filter, functions for declarative js programming
+NodeList.prototype.toArray = function(){
+	return Array.prototype.slice.call(this);
+};
 	
 var toHtml = function (string) {
 	var temp = document.createElement('div');
