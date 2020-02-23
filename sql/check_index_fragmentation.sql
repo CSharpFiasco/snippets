@@ -2,7 +2,8 @@ SELECT dbschemas.[name] as 'Schema',
 dbtables.[name] as 'Table',
 dbindexes.[name] as 'Index',
 indexstats.avg_fragmentation_in_percent,
-indexstats.page_count
+indexstats.page_count,
+CONCAT('ALTER INDEX ', dbindexes.[name], ' ON ', dbtables.[name], ' REBUILD') AS RebuildQuery
 FROM sys.dm_db_index_physical_stats (DB_ID(), NULL, NULL, NULL, NULL) AS indexstats
 INNER JOIN sys.tables dbtables on dbtables.[object_id] = indexstats.[object_id]
 INNER JOIN sys.schemas dbschemas on dbtables.[schema_id] = dbschemas.[schema_id]
