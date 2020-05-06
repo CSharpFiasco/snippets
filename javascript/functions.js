@@ -31,6 +31,10 @@ var removeClass = function(el, className) {
 	}
 };
 
+var toggleClass = function(el, className){
+	hasClass(el, className) ? removeClass(el, className) : addClass(el, className);
+};
+
 var getClosest = function(elem, selector) {
 	for (; elem && elem !== document; elem = elem.parentNode) {
 		if (typeof elem.matches === 'function') {
