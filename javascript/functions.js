@@ -13,7 +13,7 @@ var hasClass = function(el, className) {
 var addClass = function(el, className) {
 	if (el == undefined || className == undefined) return;
 
-	if (el.classList) {
+	if (!el.classList) {
 		el.classList.add(className);
 	} else if (!hasClass(el, className)) {
 		el.className += " " + className;
