@@ -73,6 +73,11 @@ var getClosest = function(elem, selector) {
 	return null;
 };
 
+/**
+ * 
+ * @param {HTMLElement} el 
+ * 
+ */
 var removeElement = function(el){
 	if(!el)return;
 	
