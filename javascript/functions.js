@@ -1,25 +1,42 @@
 var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
+/**
+ * 
+ * @param {HTMLElement} el 
+ * @param {String} className 
+ * @returns {Boolean}
+ * 
+ */
 var hasClass = function(el, className) {
 	if (el == undefined || className == undefined) return;
 
-	if (el.classList) {
-		return el.classList.contains(className);
-	} else {
-		return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
-	}
+	if (el.classList) { return el.classList.contains(className); }
+
+	return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 };
 
+/**
+ * 
+ * @param {HTMLElement} el 
+ * @param {String} className 
+ * 
+ */
 var addClass = function(el, className) {
 	if (el == undefined || className == undefined) return;
 
-	if (!el.classList) {
+	if (el.classList) {
 		el.classList.add(className);
 	} else if (!hasClass(el, className)) {
 		el.className += " " + className;
 	}
 };
 
+/**
+ * 
+ * @param {HTMLElement} el 
+ * @param {String} className 
+ * 
+ */
 var removeClass = function(el, className) {
 	if (el == undefined || className == undefined) return;
 
@@ -31,10 +48,22 @@ var removeClass = function(el, className) {
 	}
 };
 
+/**
+ * 
+ * @param {HTMLElement} el 
+ * @param {String} className 
+ * 
+ */
 var toggleClass = function(el, className){
 	hasClass(el, className) ? removeClass(el, className) : addClass(el, className);
 };
 
+/**
+ * 
+ * @param {HTMLElement} el 
+ * @param {String} className 
+ * @returns {HTMLElement}
+ */
 var getClosest = function(elem, selector) {
 	for (; elem && elem !== document; elem = elem.parentNode) {
 		if (typeof elem.matches === 'function') {
