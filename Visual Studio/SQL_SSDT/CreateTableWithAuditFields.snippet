@@ -30,7 +30,7 @@
           <ID>table</ID>
           <Type></Type>
           <ToolTip></ToolTip>
-          <Default>TabName</Default>
+          <Default>TableName</Default>
           <Function></Function>
         </Literal>
         <Literal Editable="true">
@@ -55,15 +55,15 @@
           <Function></Function>
         </Literal>
       </Declarations>
-      <Code Language="SQL_SSDT" Kind="" Delimiter="$"><![CDATA[
-CREATE TABLE [$table$](
+      <Code Language="SQL_SSDT" Kind="" Delimiter="$">
+<![CDATA[CREATE TABLE [$table$](
     [$id$]         INT      NOT NULL IDENTITY(1, 1),
     [$createDate$] DATETIME NOT NULL CONSTRAINT [DF_$table$_$createDate$] DEFAULT GETUTCDATE(),
     [CreateUser] VARCHAR(32) NOT NULL,
     [$modifyDate$] DATETIME NULL,
-    [ModifyUser] VARCHAR(32) NOT NULL,
+    [ModifyUser] VARCHAR(32) NULL,
     CONSTRAINT [PK_$table$] PRIMARY KEY CLUSTERED ([$id$] ASC)
-); $end$]]></Code>
+);$end$]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>

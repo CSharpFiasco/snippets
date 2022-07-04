@@ -2,7 +2,7 @@
 <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
   <CodeSnippet Format="1.0.0">
     <Header>
-      <Title>CREATE TABLE - snippet</Title>
+      <Title>CREATE TABLE Composite - snippet</Title>
       <Author>Microsoft Corporation</Author>
       <Description>Code snippet for CREATE TABLE command</Description>
       <HelpUrl>http://go.microsoft.com/fwlink/?LinkID=627262&amp;clcid=0x409</HelpUrl>
@@ -27,25 +27,35 @@
           <Function></Function>
         </Literal>
         <Literal Editable="true">
-          <ID>table</ID>
+          <ID>referenceTable1</ID>
           <Type></Type>
           <ToolTip></ToolTip>
-          <Default>TableName</Default>
+          <Default>Table1</Default>
           <Function></Function>
         </Literal>
         <Literal Editable="true">
-          <ID>id</ID>
+          <ID>referenceTable2</ID>
           <Type></Type>
           <ToolTip></ToolTip>
-          <Default>Id</Default>
+          <Default>Table2</Default>
           <Function></Function>
         </Literal>
       </Declarations>
       <Code Language="SQL_SSDT" Kind="" Delimiter="$">
-<![CDATA[CREATE TABLE [$table$](
-    [$id$]         INT      NOT NULL IDENTITY(1, 1),
-    CONSTRAINT [PK_$table$] PRIMARY KEY CLUSTERED ([$id$] ASC)
-);$end$]]></Code>
+<![CDATA[CREATE TABLE [$referenceTable1$$referenceTable2$](
+    [$referenceTable1$Id]         INT      NOT NULL,
+    [$referenceTable2$Id]         INT      NOT NULL,
+    CONSTRAINT [PK_$referenceTable1$$referenceTable2$] PRIMARY KEY CLUSTERED ([$referenceTable1$Id] ASC, [$referenceTable2$Id] ASC),
+    CONSTRAINT [FK_$referenceTable1$$referenceTable2$_$referenceTable1$] FOREIGN KEY ([$referenceTable1$Id]) REFERENCES [$referenceTable1$]([Id]),
+    CONSTRAINT [FK_$referenceTable1$$referenceTable2$_$referenceTable2$] FOREIGN KEY ([$referenceTable2$Id]) REFERENCES [$referenceTable2$]([Id])
+);
+GO
+
+CREATE NONCLUSTERED INDEX [IX_$referenceTable1$$referenceTable2$01] ON [$referenceTable1$$referenceTable2$]([$referenceTable1$Id] ASC);
+
+GO
+CREATE NONCLUSTERED INDEX [IX_$referenceTable1$$referenceTable2$02] ON [$referenceTable1$$referenceTable2$]([$referenceTable2$Id] ASC);
+$end$]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>
