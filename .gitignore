@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Publish profiles for dacpac
 !*.publish.xml
+
+bin/*
+obj/*

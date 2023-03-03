@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>full service</Title>
+			<Shortcut>srv-ef</Shortcut>
+			<Description>Code snippet for service class with DbContext DI</Description>
+			<Author>Microsoft Corporation</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal Editable="true">
+					<ID>name</ID>
+					<ToolTip>Service class name</ToolTip>
+					<Default>MyEntityService</Default>
+				</Literal>
+				<Literal Editable="true">
+					<ID>context</ID>
+					<ToolTip>DbContext name</ToolTip>
+					<Default>MyContext</Default>
+				</Literal>
+				<Literal Editable="true">
+					<ID>entity</ID>
+					<ToolTip>Entity name</ToolTip>
+					<Default>MyEntity</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[public class $name$
+{
+    private readonly $context$ _context;
+    public $name$ ($context$ context)
+    {
+        _context = context;
+    }
+
+    public async Task<$entity$> GetByIdAsync(int id)
+    {
+        var entity = await _context.$entity$.AsNoTracking()
+            .SingleOrDefaultAsync(i => i.Id == id);
+
+        return entity is not null
+            ? entity
+            : throw new EntityDoesNotExistException<$entity$>();
+    }
+
+    public async Task AddAsync($entity$ entity)
+    {
+        if (await _context.$entity$.AnyAsync(e => entity.Id == e.Id))
+            throw new EntityAlreadyExistsException<$entity$>();
+        await _context.$entity$.AddAsync(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(int id, $entity$ entity)
+    {
+        var entityToUpdate = await _context.$entity$.SingleOrDefaultAsync(e => id == e.Id);
+        if (entityToUpdate is null)
+            throw new EntityDoesNotExistException<$entity$>();
+
+        /* todo: update entityToUpdate here */
+
+        _context.$entity$.Update(entityToUpdate);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        await _context.$entity$.Where(e => e.Id == id).ExecuteDeleteAsync();
+    }
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
